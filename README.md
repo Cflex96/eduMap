@@ -11,8 +11,7 @@ Currently supported operations are:
 ## TODOS
 
 - [x] implement growth algorithm
-- [ ] implement entry tuple
-- [ ] instantiate with tuple
+- [x] instantiate with array
 - [ ] getKeys
 - [ ] getValues
 - [ ] getEntries

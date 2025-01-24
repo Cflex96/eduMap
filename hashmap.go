@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/gob"
+	"errors"
 	"hash/maphash"
 	"math"
 
@@ -26,7 +27,7 @@ type HashMap[K MapKeyConstraint, V comparable] struct {
 	loadFactor float64
 }
 
-func New[K, V MapKeyConstraint](capacity uint) HashMap[K, V] {
+func New[K MapKeyConstraint, V comparable](capacity uint) HashMap[K, V] {
 	return HashMap[K, V]{
 		buckets:    make([]*Node[K, V], capacity),
 		size:       0,
@@ -34,6 +35,29 @@ func New[K, V MapKeyConstraint](capacity uint) HashMap[K, V] {
 		capacity:   capacity,
 		loadFactor: 0.6,
 	}
+}
+
+func NewFromSlices[K MapKeyConstraint, V comparable](keys []K, values []V) (HashMap[K, V], error) {
+	keySize := len(keys)
+	valueSize := len(values)
+	if keySize != valueSize {
+		return HashMap[K, V]{}, errors.New("cannot create map from arrays of different length")
+	}
+
+	items := make([]*Node[K, V], keySize*2)
+	m := HashMap[K, V]{
+		buckets:    items,
+		size:       uint(keySize) * 3,
+		seed:       maphash.MakeSeed(),
+		capacity:   uint(keySize) * 3,
+		loadFactor: 0.6,
+	}
+
+	for index, key := range keys {
+		m.Set(key, values[index])
+	}
+
+	return m, nil
 }
 
 func newKey[K MapKeyConstraint](keyLiteral K, seed maphash.Seed) *Key[K] {

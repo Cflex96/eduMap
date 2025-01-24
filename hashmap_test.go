@@ -48,5 +48,30 @@ func TestGrow(t *testing.T) {
 	}
 }
 
-func TestSomeShit(t *testing.T) {
+func TestNewFromSlices(t *testing.T) {
+	keys := []string{"1", "2", "3"}
+	values := []string{"1", "2", "3"}
+	m, err := NewFromSlices(keys, values)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for i := range keys {
+		if res := m.Get(keys[i]); res != values[i] {
+			t.Fatalf("expected %s but recieved %s", values[i], res)
+		}
+	}
+}
+
+func TestNewFromSlicesInt(t *testing.T) {
+	keys := []int{1, 2, 3}
+	values := []string{"1", "2", "3"}
+	m, err := NewFromSlices(keys, values)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for i := range keys {
+		if res := m.Get(keys[i]); res != values[i] {
+			t.Fatalf("expected %s but recieved %s", values[i], res)
+		}
+	}
 }
