@@ -10,8 +10,6 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
-// TODO: grow,keys(), values(), Tuple,  instantiate with Tuple, iterator for tuple, values and keys, pointer key type maybe
-
 type number interface {
 	constraints.Float | constraints.Integer
 }
